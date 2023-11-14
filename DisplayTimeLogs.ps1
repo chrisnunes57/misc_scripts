@@ -1,3 +1,5 @@
+param([switch]$v=$false)
+
 function Format-PhaseOffset($seconds) {
     $decimalSeconds = [decimal]$seconds
     $miliseconds = $decimalSeconds * 1000
@@ -22,7 +24,11 @@ $formattedEvents = $syncEvents | Select-Object @{
 },  TimeCreated
 
 # print all events
-$formattedEvents | Format-List TimeCreated, PhaseOffset, LastSync, TimeSource
+if ($v) {
+    $formattedEvents | Format-List TimeCreated, PhaseOffset, LastSync, TimeSource
+}
+
+# print current configuration
 
 #calculate average
 $averageOffset = $formattedEvents | Measure-Object -Property PhaseOffset -Average | Select-Object -Property Average, Count
